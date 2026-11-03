@@ -50,8 +50,12 @@ test.describe('SauceDemo', { tag: '@ui' }, () => {
 
     // 4. En el resumen leemos los precios que muestra la página ("$29.99" → 29.99).
     //    SauceDemo no permite cantidades > 1, por eso quantity = 1.
-    const preciosTexto = await page.getByTestId('inventory-item-price').allTextContents();
-    expect(preciosTexto.length).toBeGreaterThan(0);
+    //    allTextContents() NO espera: lee lo que haya en ese instante. Por eso
+    //    primero esperamos (con una aserción web-first) a que el resumen cargue.
+    await expect(page).toHaveURL(/checkout-step-two/);
+    const precios = page.getByTestId('inventory-item-price');
+    await expect(precios.first()).toBeVisible();
+    const preciosTexto = await precios.allTextContents();
     const items = preciosTexto.map((texto) => ({
       price: Number(texto.replace('$', '').trim()),
       quantity: 1,
