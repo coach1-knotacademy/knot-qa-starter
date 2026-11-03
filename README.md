@@ -19,6 +19,8 @@ Los dos tracks tienen **exactamente las mismas pruebas**. Elige uno; los princip
 
 ## Puesta a punto (en la S1, mientras avanza la teoría)
 
+Guía paso a paso por track, macOS y Windows, con proxy corporativo y plan B en la nube: [`docs/instalacion.md`](docs/instalacion.md).
+
 ```bash
 git clone https://github.com/coach1-knotacademy/knot-qa-starter.git
 cd knot-qa-starter
