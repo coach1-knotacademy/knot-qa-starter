@@ -1,0 +1,26 @@
+{
+  "name": "knot-qa-starter-ts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Starter de automatización de pruebas (Bootcamp QA, sesión 1): la misma regla de negocio probada en las tres capas de la pirámide (unitaria, API, UI) con Playwright + TypeScript.",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "test": "playwright test",
+    "test:unit": "playwright test --project=unit",
+    "test:api": "playwright test --project=api",
+    "test:ui": "playwright test --project=ui",
+    "test:headed": "playwright test --project=ui --headed",
+    "test:ui-mode": "playwright test --ui",
+    "report": "playwright show-report",
+    "codegen": "playwright codegen https://www.saucedemo.com",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "^22.20.5",
+    "typescript": "^5.9.3"
+  }
+}

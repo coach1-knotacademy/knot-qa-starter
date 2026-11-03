@@ -1,0 +1,10 @@
+.DS_Store
+Thumbs.db
+.idea/
+*.iml
+.vscode/
+node_modules/
+target/
+test-results/
+playwright-report/
+blob-report/
