@@ -21,16 +21,27 @@ Los dos tracks tienen **exactamente las mismas pruebas**. Elige uno; los princip
 
 Guía paso a paso por track, macOS y Windows, con proxy corporativo y plan B en la nube: [`docs/instalacion.md`](docs/instalacion.md).
 
+**Windows (PowerShell):**
+
+```powershell
+mkdir $HOME\dev -Force
+cd $HOME\dev
+git clone https://github.com/coach1-knotacademy/knot-qa-starter.git
+cd knot-qa-starter
+powershell -ExecutionPolicy Bypass -File scripts\instalar-entorno.ps1     # instala lo que falte
+powershell -ExecutionPolicy Bypass -File scripts\verificar-entorno.ps1    # en una terminal nueva
+```
+
+**macOS (Terminal):**
+
 ```bash
 git clone https://github.com/coach1-knotacademy/knot-qa-starter.git
 cd knot-qa-starter
-
-# macOS / Linux
-./scripts/verificar-entorno.sh
-
-# Windows (PowerShell)
-powershell -ExecutionPolicy Bypass -File scripts\verificar-entorno.ps1
+./scripts/instalar-entorno.sh     # instala lo que falte
+./scripts/verificar-entorno.sh    # en una terminal nueva
 ```
+
+Los comandos de las pruebas (`mvn`, `npm`) son iguales en los dos sistemas.
 
 ¿No tienes permisos de instalación? Abre este repo en **GitHub Codespaces** (*Code → Codespaces → Create codespace*). El contenedor trae Java 21, Maven, Node 22 y Chromium listos. Corre la UI en modo headless: `mvn test -Dheadless=true` o `npm run test:ui`. En Codespaces tu trabajo vive en el codespace: no lo borres.
 
@@ -43,7 +54,7 @@ No hay tareas fuera de las sesiones. El framework se construye en vivo, sesión 
 | S1, una sola vez | Clonar el repo | `git clone https://github.com/coach1-knotacademy/knot-qa-starter.git` |
 | Inicio de cada sesión | Traer lo nuevo del coach (retos y andamiaje) | `git pull --no-rebase --no-edit` |
 | Durante la sesión | Resolver el reto del día | `retos/S01.md`, `retos/S02.md`… |
-| Cierre de cada sesión | Guardar tu avance | `git add -A && git commit -m "S01: …"` |
+| Cierre de cada sesión | Guardar tu avance | `git add -A` y luego `git commit -m "S01: …"` |
 
 ### ¿Te atrasaste o faltaste a una sesión?
 

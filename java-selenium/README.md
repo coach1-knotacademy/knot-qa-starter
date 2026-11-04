@@ -67,7 +67,7 @@ Tips:
 
 - Agrega `-q` para una salida más limpia: `mvn -q test -Dgroups=unit` (si todo pasa, no imprime nada).
 - **Headless**: `-Dheadless=true|false` manda. Si no lo indicas, es `false` en tu máquina (ves el navegador) y `true` automáticamente si existe la variable de entorno `CI` (pipelines).
-- **URLs**: están en `src/test/resources/config.properties` y se pueden sobrescribir: `mvn test -Dgroups=api -Dapi.baseUrl=https://otra-url.com`.
+- **URLs**: están en `src/test/resources/config.properties` y se pueden sobrescribir: `mvn test -Dgroups=api "-Dapi.baseUrl=https://otra-url.com"`. Las comillas son necesarias en PowerShell, porque el nombre lleva un punto.
 - Los reportes XML/TXT quedan en `target/surefire-reports/`.
 
 ## Tabla para registrar tiempos
@@ -142,7 +142,7 @@ Este proyecto es **pequeño y plano a propósito**: hoy el foco es la pirámide,
 ## Problemas comunes
 
 **Proxy corporativo: Maven no descarga dependencias** (`Could not transfer artifact`, `PKIX path building failed`, timeouts).
-Configura el proxy en `~/.m2/settings.xml`:
+Configura el proxy en `settings.xml`, en `C:\Users\<tu-usuario>\.m2\` (Windows) o `~/.m2/` (macOS):
 
 ```xml
 <settings>
@@ -166,7 +166,8 @@ Si tu empresa tiene un repositorio interno (Nexus/Artifactory), configúralo com
 Descarga manualmente el chromedriver de la **misma versión mayor** que tu Chrome desde https://googlechromelabs.github.io/chrome-for-testing/ y apúntalo así:
 
 ```bash
-mvn test -Dgroups=ui -Dwebdriver.chrome.driver=/ruta/a/chromedriver
+# Las comillas son necesarias en PowerShell. En Windows, la ruta es C:\ruta\chromedriver.exe
+mvn test -Dgroups=ui "-Dwebdriver.chrome.driver=/ruta/a/chromedriver"
 ```
 
 En macOS, si aparece "no se puede verificar el desarrollador": `xattr -d com.apple.quarantine /ruta/a/chromedriver`.
