@@ -29,7 +29,11 @@ function Test-Version($Nombre, $Comando, $Minimo) {
 Write-Host '== Comun =='
 Test-Version 'Git' 'git --version' $null
 
-Write-Host '== Track A: Java + Selenium =='
+Write-Host '== Track Playwright =='
+Test-Version 'Node' 'node -v' 20
+Test-Version 'npm' 'npm -v' $null
+
+Write-Host '== Track Java + Selenium =='
 Test-Version 'Java' 'java -version' 17
 $salidaMaven = Get-Salida 'mvn -v'
 if ($salidaMaven -match 'JAVA_HOME') {
@@ -48,14 +52,10 @@ $chrome = @(
 ) | Where-Object { Test-Path $_ }
 if ($chrome) { Write-Ok 'Chrome' } else { Write-Aviso 'Chrome no encontrado (Selenium Manager intentara descargarlo)' }
 
-Write-Host '== Track B: TypeScript + Playwright =='
-Test-Version 'Node' 'node -v' 20
-Test-Version 'npm' 'npm -v' $null
-
 Write-Host '== Windows =='
 $politica = Get-ExecutionPolicy
 if ($politica -in @('Restricted', 'AllSigned', 'Undefined')) {
-  Write-Aviso "La politica de ejecucion es $politica: npm y npx pueden fallar en PowerShell. Solucion: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned"
+  Write-Aviso "La politica de ejecucion es ${politica}: npm y npx pueden fallar en PowerShell. Solucion: Set-ExecutionPolicy -Scope CurrentUser RemoteSigned"
 } else { Write-Ok "Politica de ejecucion: $politica" }
 if ((Get-Location).Path -match 'OneDrive') {
   Write-Aviso 'El repo esta dentro de OneDrive. La sincronizacion puede bloquear archivos: mejor clonalo en una carpeta como $HOME\dev.'

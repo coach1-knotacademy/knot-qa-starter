@@ -4,7 +4,7 @@
 #   powershell -ExecutionPolicy Bypass -File scripts\instalar-entorno.ps1
 #
 # Opciones:
-#   -Track java | playwright | ambos   Evita la pregunta inicial
+#   -Track playwright | java | ambos   Evita la pregunta inicial
 #   -SinProyecto                       No prepara el proyecto ni corre la prueba de humo
 #   -Simular                           Muestra lo que haria, sin instalar nada
 #
@@ -144,13 +144,14 @@ Write-Host 'Bootcamp QA y Automatizacion: instalador para Windows' -ForegroundCo
 if (-not $Track) {
   Write-Host ''
   Write-Host 'Que track vas a usar?'
-  Write-Host '  1) Java + Selenium'
-  Write-Host '  2) TypeScript + Playwright'
+  Write-Host '  1) TypeScript + Playwright (recomendado)'
+  Write-Host '  2) Java + Selenium'
   Write-Host '  3) Los dos'
-  $opcion = Read-Host 'Escribe 1, 2 o 3'
-  switch ($opcion.Trim()) {
-    '1' { $Track = 'java' }
-    '2' { $Track = 'playwright' }
+  $opcion = Read-Host 'Escribe 1, 2 o 3 (Enter = 1)'
+  switch ("$opcion".Trim()) {
+    ''  { $Track = 'playwright' }
+    '1' { $Track = 'playwright' }
+    '2' { $Track = 'java' }
     '3' { $Track = 'ambos' }
     default { Write-Host 'Opcion no valida. Corre el script de nuevo.' -ForegroundColor Red; exit 2 }
   }
@@ -170,17 +171,17 @@ Confirm-Comando 'Git' 'Git.Git' 'git --version' $null
 if (Get-Command code -ErrorAction SilentlyContinue) { Write-Ok 'VS Code ya esta instalado' }
 else { Install-Paquete 'Visual Studio Code' 'Microsoft.VisualStudioCode' }
 
+if ($Track -in @('playwright', 'ambos')) {
+  Write-Paso 'Track Playwright'
+  Confirm-Comando 'Node.js' 'OpenJS.NodeJS.LTS' 'node -v' 20
+}
+
 if ($Track -in @('java', 'ambos')) {
-  Write-Paso 'Track A: Java + Selenium'
+  Write-Paso 'Track Java + Selenium'
   Confirm-Comando 'Java' 'EclipseAdoptium.Temurin.21.JDK' 'java -version' 17
   Install-Maven
   Confirm-Chrome
 }
-if ($Track -in @('playwright', 'ambos')) {
-  Write-Paso 'Track B: TypeScript + Playwright'
-  Confirm-Comando 'Node.js' 'OpenJS.NodeJS.LTS' 'node -v' 20
-}
-
 if (-not $Simular -and (Get-Command git -ErrorAction SilentlyContinue) -and -not (& git config --global user.name)) {
   Write-Paso 'Identidad de Git (se usa en cada commit)'
   try {
@@ -197,13 +198,6 @@ if ($raiz -match 'OneDrive') {
 }
 
 if (-not $SinProyecto -and -not $Simular -and $script:Pendientes.Count -eq 0) {
-  if ($Track -in @('java', 'ambos') -and (Test-Path (Join-Path $raiz 'java-selenium\pom.xml'))) {
-    Write-Paso 'Prueba de humo: Java (la primera vez tarda de 2 a 5 minutos)'
-    Push-Location (Join-Path $raiz 'java-selenium')
-    $mvn = Get-Herramienta 'mvn'
-    [void](Invoke-Paso 'mvn test -Dgroups=unit' { & $mvn -q test -Dgroups=unit })
-    Pop-Location
-  }
   if ($Track -in @('playwright', 'ambos') -and (Test-Path (Join-Path $raiz 'ts-playwright\package.json'))) {
     Write-Paso 'Prueba de humo: Playwright'
     Push-Location (Join-Path $raiz 'ts-playwright')
@@ -214,6 +208,13 @@ if (-not $SinProyecto -and -not $Simular -and $script:Pendientes.Count -eq 0) {
         [void](Invoke-Paso 'npm run test:unit' { & $npm run test:unit })
       }
     }
+    Pop-Location
+  }
+  if ($Track -in @('java', 'ambos') -and (Test-Path (Join-Path $raiz 'java-selenium\pom.xml'))) {
+    Write-Paso 'Prueba de humo: Java (la primera vez tarda de 2 a 5 minutos)'
+    Push-Location (Join-Path $raiz 'java-selenium')
+    $mvn = Get-Herramienta 'mvn'
+    [void](Invoke-Paso 'mvn test -Dgroups=unit' { & $mvn -q test -Dgroups=unit })
     Pop-Location
   }
 }

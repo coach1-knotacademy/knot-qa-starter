@@ -16,16 +16,16 @@ check() { # nombre, comando, versión mínima (major)
 }
 echo "== Común =="
 check "Git" "git --version" ""
-echo "== Track A · Java + Selenium =="
+echo "== Track Playwright =="
+check "Node" "node -v" 20
+check "npm" "npm -v" ""
+echo "== Track Java + Selenium =="
 check "Java" "java -version" 17
 check "Maven" "mvn -v" 3
 if [ -d "/Applications/Google Chrome.app" ] || command -v google-chrome >/dev/null 2>&1 || command -v chromium >/dev/null 2>&1; then
   echo "🟢 Chrome"; else echo "🟡 Chrome no encontrado (Selenium Manager intentará descargarlo)"; fi
-echo "== Track B · TypeScript + Playwright =="
-check "Node" "node -v" 20
-check "npm" "npm -v" ""
 echo "== Red =="
-for u in https://repo.maven.apache.org/maven2/ https://registry.npmjs.org/ https://www.saucedemo.com https://dummyjson.com/products/1; do
+for u in https://github.com https://repo.maven.apache.org/maven2/ https://registry.npmjs.org/ https://cdn.playwright.dev/ https://www.saucedemo.com https://dummyjson.com/products/1; do
   if curl -s -m 8 -o /dev/null "$u"; then echo "🟢 $u"; else echo "🔴 $u (¿proxy?)"; fi
 done
 [ -n "$HTTPS_PROXY$https_proxy" ] && echo "ℹ️  Proxy detectado: ${HTTPS_PROXY:-$https_proxy}"

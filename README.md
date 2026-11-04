@@ -6,16 +6,16 @@ Una regla de negocio (`PriceCalculator`: subtotal, impuesto del 8 % y total) pro
 
 ## Elige tu track
 
-| | ☕ Track A · `java-selenium/` | 🎭 Track B · `ts-playwright/` |
+| | 🎭 Track Playwright · `ts-playwright/` (recomendado) | ☕ Track Java · `java-selenium/` |
 |---|---|---|
-| Stack | Java 17+, Maven, JUnit 5, Selenium 4, REST Assured | Node 20+, TypeScript, Playwright Test |
-| Unit | `mvn test -Dgroups=unit` | `npm run test:unit` |
-| API | `mvn test -Dgroups=api` | `npm run test:api` |
-| UI | `mvn test -Dgroups=ui` | `npm run test:ui` |
-| Todo | `mvn test` | `npm test` |
-| Instrucciones | [java-selenium/README.md](java-selenium/README.md) | [ts-playwright/README.md](ts-playwright/README.md) |
+| Stack | Node 20+, TypeScript, Playwright Test | Java 17+, Maven, JUnit 5, Selenium 4, REST Assured |
+| Unit | `npm run test:unit` | `mvn test -Dgroups=unit` |
+| API | `npm run test:api` | `mvn test -Dgroups=api` |
+| UI | `npm run test:ui` | `mvn test -Dgroups=ui` |
+| Todo | `npm test` | `mvn test` |
+| Instrucciones | [ts-playwright/README.md](ts-playwright/README.md) | [java-selenium/README.md](java-selenium/README.md) |
 
-Los dos tracks tienen **exactamente las mismas pruebas**. Elige uno; los principios de arquitectura que veremos son los mismos.
+Los dos tracks tienen **exactamente las mismas pruebas**. Elige uno; **recomendamos Playwright**, salvo que tu proyecto sea Java. Los principios de arquitectura que veremos son los mismos.
 
 ## Puesta a punto (en la S1, mientras avanza la teoría)
 

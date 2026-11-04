@@ -2,14 +2,14 @@
 
 **Knot Academy × Accenture** · Windows y macOS · entre 20 y 40 minutos. Lo hacemos en los primeros minutos de la sesión 1, mientras avanza la teoría; no hace falta adelantarlo.
 
-Instala **un solo track**. Si tu proyecto es Java o trabajas en banca, elige **A**. Si quieres velocidad o usas IA a diario, elige **B**.
+Instala **un solo track**. **Recomendado: Playwright.** Elige Java solo si tu proyecto es Java o tu equipo ya trabaja con Selenium.
 
-| | Track A · Java + Selenium | Track B · TypeScript + Playwright |
+| | Track Playwright (recomendado) | Track Java + Selenium |
 |---|---|---|
-| Lenguaje | Java 17 o superior (se instala el 21) | Node.js 20 o superior |
-| Build | Maven 3.9 o superior | npm (viene con Node) |
-| Navegador | Google Chrome | Chromium de Playwright (se descarga) |
-| Editor | IntelliJ IDEA Community o VS Code + *Extension Pack for Java* | VS Code + *Playwright Test for VSCode* |
+| Lenguaje | Node.js 20 o superior | Java 17 o superior (se instala el 21) |
+| Build | npm (viene con Node) | Maven 3.9 o superior |
+| Navegador | Chromium de Playwright (se descarga) | Google Chrome |
+| Editor | VS Code + *Playwright Test for VSCode* | IntelliJ IDEA Community o VS Code + *Extension Pack for Java* |
 
 **Para los dos:** Git y VS Code (o tu editor). La cuenta de GitHub solo hace falta para usar Codespaces y, más adelante, para tu repo propio.
 
@@ -37,7 +37,7 @@ cd knot-qa-starter
 powershell -ExecutionPolicy Bypass -File scripts\instalar-entorno.ps1
 ```
 
-El instalador te pregunta el track. Windows puede pedirte confirmar como administrador para Java, Node o Chrome. Al terminar, **cierra y abre la terminal**.
+El instalador te pregunta el track: **Enter elige Playwright**. Windows puede pedirte confirmar como administrador para Java, Node o Chrome. Al terminar, **cierra y abre la terminal**.
 
 ¿No tienes `winget`? Instala *Instalador de aplicación* desde Microsoft Store o sigue la [instalación manual](#windows-instalación-manual). Sin permisos de instalación, ve directo al [plan B](#plan-b--sin-permisos-de-instalación-github-codespaces).
 
@@ -75,34 +75,7 @@ winget install --id Git.Git -e --source winget
 winget install --id Microsoft.VisualStudioCode -e --source winget
 ```
 
-### Track A · Java + Selenium
-
-```powershell
-winget install --id EclipseAdoptium.Temurin.21.JDK -e --source winget
-winget install --id Google.Chrome -e --source winget
-```
-
-**Maven** no está en winget. Se instala en tu carpeta de usuario, sin permisos de administrador:
-
-1. Descarga `apache-maven-3.9.16-bin.zip` desde [maven.apache.org/download.cgi](https://maven.apache.org/download.cgi).
-2. Descomprímelo en `C:\Users\<tu-usuario>\tools\`.
-3. Agrégalo al `Path` de tu usuario:
-
-   ```powershell
-   $bin = "$HOME\tools\apache-maven-3.9.16\bin"
-   [Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ";$bin", 'User')
-   ```
-
-4. Cierra y abre la terminal.
-
-Verifica:
-
-```powershell
-java -version    # 17 o superior
-mvn -v           # 3.9 o superior, y debe mostrar Java 17 o superior
-```
-
-### Track B · TypeScript + Playwright
+### Track Playwright (recomendado)
 
 ```powershell
 winget install --id OpenJS.NodeJS.LTS -e --source winget
@@ -136,6 +109,33 @@ Set-ExecutionPolicy -Scope CurrentUser RemoteSigned
 
 Si tu empresa no permite cambiarla, usa `npm.cmd` y `npx.cmd` en lugar de `npm` y `npx`. Por ejemplo: `npm.cmd run test:unit`.
 
+### Track Java + Selenium
+
+```powershell
+winget install --id EclipseAdoptium.Temurin.21.JDK -e --source winget
+winget install --id Google.Chrome -e --source winget
+```
+
+**Maven** no está en winget. Se instala en tu carpeta de usuario, sin permisos de administrador:
+
+1. Descarga `apache-maven-3.9.16-bin.zip` desde [maven.apache.org/download.cgi](https://maven.apache.org/download.cgi).
+2. Descomprímelo en `C:\Users\<tu-usuario>\tools\`.
+3. Agrégalo al `Path` de tu usuario:
+
+   ```powershell
+   $bin = "$HOME\tools\apache-maven-3.9.16\bin"
+   [Environment]::SetEnvironmentVariable('Path', [Environment]::GetEnvironmentVariable('Path', 'User') + ";$bin", 'User')
+   ```
+
+4. Cierra y abre la terminal.
+
+Verifica:
+
+```powershell
+java -version    # 17 o superior
+mvn -v           # 3.9 o superior, y debe mostrar Java 17 o superior
+```
+
 ---
 
 ## macOS · instalación manual
@@ -147,15 +147,7 @@ brew install git
 brew install --cask visual-studio-code
 ```
 
-### Track A · Java + Selenium
-
-```bash
-brew install --cask temurin@21
-brew install maven
-brew install --cask google-chrome   # si no lo tienes
-```
-
-### Track B · TypeScript + Playwright
+### Track Playwright (recomendado)
 
 ```bash
 brew install node@22
@@ -163,6 +155,14 @@ brew link --overwrite --force node@22
 ```
 
 El `brew link` es necesario: sin él, Homebrew instala `node@22` pero el comando `node` no queda disponible.
+
+### Track Java + Selenium
+
+```bash
+brew install --cask temurin@21
+brew install maven
+brew install --cask google-chrome   # si no lo tienes
+```
 
 ---
 
@@ -181,15 +181,7 @@ git config --global user.email "tu-correo@ejemplo.com"
 
 Los comandos son iguales en Windows y macOS. El instalador ya corre la capa unitaria; aquí puedes probar también la UI.
 
-**Track A:**
-
-```bash
-cd knot-qa-starter/java-selenium
-mvn test -Dgroups=unit     # la primera vez descarga dependencias (2–5 min)
-mvn test -Dgroups=ui       # debe abrir Chrome y pasar
-```
-
-**Track B:**
+**Track Playwright:**
 
 ```bash
 cd knot-qa-starter/ts-playwright
@@ -199,7 +191,15 @@ npm run test:unit
 npm run test:ui
 ```
 
-Extensión recomendada para el track B: **Playwright Test for VSCode** (Microsoft). Permite correr, depurar y grabar pruebas desde el editor.
+**Track Java:**
+
+```bash
+cd knot-qa-starter/java-selenium
+mvn test -Dgroups=unit     # la primera vez descarga dependencias (2–5 min)
+mvn test -Dgroups=ui       # debe abrir Chrome y pasar
+```
+
+Extensión recomendada: **Playwright Test for VSCode** (Microsoft). Permite correr, depurar y grabar pruebas desde el editor.
 
 ---
 

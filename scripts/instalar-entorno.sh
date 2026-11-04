@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Instala el entorno del Bootcamp QA en macOS con Homebrew. Solo instala lo que falta.
 # Uso, desde la raíz del repo:
-#   ./scripts/instalar-entorno.sh [java|playwright|ambos] [--sin-proyecto] [--simular]
+#   ./scripts/instalar-entorno.sh [playwright|java|ambos] [--sin-proyecto] [--simular]
 # En Windows usa scripts\instalar-entorno.ps1. En Linux, sigue docs/instalacion.md.
 set -u
 
@@ -25,10 +25,10 @@ if ! command -v brew >/dev/null 2>&1; then
 fi
 
 if [ -z "$track" ]; then
-  printf '¿Qué track vas a usar?\n  1) Java + Selenium\n  2) TypeScript + Playwright\n  3) Los dos\n'
-  read -r -p 'Escribe 1, 2 o 3: ' opcion
+  printf '¿Qué track vas a usar?\n  1) TypeScript + Playwright (recomendado)\n  2) Java + Selenium\n  3) Los dos\n'
+  read -r -p 'Escribe 1, 2 o 3 (Enter = 1): ' opcion
   case "$opcion" in
-    1) track=java ;; 2) track=playwright ;; 3) track=ambos ;;
+    ""|1) track=playwright ;; 2) track=java ;; 3) track=ambos ;;
     *) echo "Opción no válida."; exit 2 ;;
   esac
 fi
@@ -64,25 +64,25 @@ else
   instalar "VS Code" --cask visual-studio-code
 fi
 
-if [ "$track" != "playwright" ]; then
-  echo "== Track A · Java + Selenium =="
-  asegurar "Java" "java -version" 17 --cask temurin@21
-  asegurar "Maven" "mvn -v" 3 maven
-  if [ -d "/Applications/Google Chrome.app" ]; then
-    echo "🟢 Google Chrome ya está instalado"
-  else
-    instalar "Google Chrome" --cask google-chrome
-  fi
-fi
-
 if [ "$track" != "java" ]; then
-  echo "== Track B · TypeScript + Playwright =="
+  echo "== Track Playwright =="
   v=$(version_major "node -v")
   if [ -n "$v" ] && [ "$v" -ge 20 ]; then
     echo "🟢 Node.js ya está instalado (versión $v)"
   elif instalar "Node.js 22" node@22 && [ "$simular" = 0 ]; then
     # node@22 es keg-only: sin este enlace, el comando node no queda en el PATH.
     brew link --overwrite --force node@22 || { echo "🔴 No se pudo enlazar node@22"; pendientes=$((pendientes+1)); }
+  fi
+fi
+
+if [ "$track" != "playwright" ]; then
+  echo "== Track Java + Selenium =="
+  asegurar "Java" "java -version" 17 --cask temurin@21
+  asegurar "Maven" "mvn -v" 3 maven
+  if [ -d "/Applications/Google Chrome.app" ]; then
+    echo "🟢 Google Chrome ya está instalado"
+  else
+    instalar "Google Chrome" --cask google-chrome
   fi
 fi
 
@@ -96,16 +96,16 @@ fi
 
 raiz="$(cd "$(dirname "$0")/.." && pwd)"
 if [ "$sin_proyecto" = 0 ] && [ "$pendientes" = 0 ]; then
-  if [ "$track" != "playwright" ]; then
-    echo "== Prueba de humo: Java (la primera vez tarda de 2 a 5 minutos) =="
-    (cd "$raiz/java-selenium" && mvn -q test -Dgroups=unit) && echo "🟢 mvn test -Dgroups=unit" \
-      || { echo "🔴 Falló mvn test -Dgroups=unit"; pendientes=$((pendientes+1)); }
-  fi
   if [ "$track" != "java" ]; then
     echo "== Prueba de humo: Playwright =="
     (cd "$raiz/ts-playwright" && npm ci --no-audit --no-fund && npx playwright install chromium && npm run test:unit) \
       && echo "🟢 npm run test:unit" \
       || { echo "🔴 Falló la prueba de humo de Playwright"; pendientes=$((pendientes+1)); }
+  fi
+  if [ "$track" != "playwright" ]; then
+    echo "== Prueba de humo: Java (la primera vez tarda de 2 a 5 minutos) =="
+    (cd "$raiz/java-selenium" && mvn -q test -Dgroups=unit) && echo "🟢 mvn test -Dgroups=unit" \
+      || { echo "🔴 Falló mvn test -Dgroups=unit"; pendientes=$((pendientes+1)); }
   fi
 fi
 
