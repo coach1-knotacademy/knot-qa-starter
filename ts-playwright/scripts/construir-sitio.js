@@ -27,7 +27,7 @@ if (fs.existsSync('evidencias.html')) fs.copyFileSync('evidencias.html', path.jo
 if (fs.existsSync('playwright-report')) fs.cpSync('playwright-report', path.join(SALIDA, 'reporte'), { recursive: true });
 const traza = path.join('test-results');
 if (fs.existsSync(traza)) {
-  const carpeta = fs.readdirSync(traza).find((c) => c.startsWith('02-otp') && fs.existsSync(path.join(traza, c, 'trace.zip')));
+  const carpeta = fs.readdirSync(traza).find((c) => c.startsWith('02-otp') && c.includes('ingresa') && fs.existsSync(path.join(traza, c, 'trace.zip')));
   if (carpeta) fs.copyFileSync(path.join(traza, carpeta, 'trace.zip'), path.join(SALIDA, 'traza.zip'));
 }
 fs.copyFileSync(path.join('demo-banco', 'portada.html'), path.join(SALIDA, 'index.html'));
