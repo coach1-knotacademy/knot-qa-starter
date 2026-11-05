@@ -43,7 +43,7 @@ cd knot-qa-starter
 
 Los comandos de las pruebas (`mvn`, `npm`) son iguales en los dos sistemas.
 
-¿No tienes permisos de instalación? Abre este repo en **GitHub Codespaces** (*Code → Codespaces → Create codespace*). El contenedor trae Java 21, Maven, Node 22 y Chromium listos. Corre la UI en modo headless: `mvn test -Dheadless=true` o `npm run test:ui`. En Codespaces tu trabajo vive en el codespace: no lo borres.
+¿No tienes permisos de instalación? Abre este repo en **GitHub Codespaces** (*Code → Codespaces → Create codespace*). El contenedor trae Node 22 y Chromium listos para el track Playwright. Corre las pruebas sin ventana: `npm run test:ui`. En Codespaces tu trabajo vive en el codespace: no lo borres.
 
 ## Cómo trabajamos: todo en clase
 

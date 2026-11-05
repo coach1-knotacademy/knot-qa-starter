@@ -30,5 +30,6 @@ if (fs.existsSync(traza)) {
   const carpeta = fs.readdirSync(traza).find((c) => c.startsWith('02-otp') && c.includes('buz') && fs.existsSync(path.join(traza, c, 'trace.zip')));
   if (carpeta) fs.copyFileSync(path.join(traza, carpeta, 'trace.zip'), path.join(SALIDA, 'traza.zip'));
 }
+fs.copyFileSync(path.join('demo-banco', 'calculadora.html'), path.join(SALIDA, 'calculadora.html'));
 fs.copyFileSync(path.join('demo-banco', 'portada.html'), path.join(SALIDA, 'index.html'));
 console.log('sitio/ listo');

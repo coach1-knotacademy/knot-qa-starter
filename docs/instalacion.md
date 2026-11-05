@@ -290,17 +290,19 @@ No desactives la validación de certificados (`strict-ssl false`) para salir del
 
 ## Plan B · sin permisos de instalación: GitHub Codespaces
 
-Funciona igual desde Windows o macOS, porque todo corre en el navegador. Necesitas una cuenta de GitHub.
+Funciona igual desde Windows o macOS, porque todo corre en el navegador. Necesitas una cuenta de GitHub, y que tu red permita abrirlo.
 
 1. Abre el [repo en GitHub](https://github.com/coach1-knotacademy/knot-qa-starter) → botón **Code** → pestaña **Codespaces** → **Create codespace on main**.
-2. Espera de 3 a 5 minutos: el contenedor instala Java 21, Maven, Node 22 y Chromium.
+2. Espera de 3 a 5 minutos: el contenedor instala Node y Chromium para el track Playwright. Para Java se necesita instalarlo aparte.
 3. En la terminal del Codespace:
 
 ```bash
-cd java-selenium && mvn test -Dheadless=true
-# o
-cd ts-playwright && npm test
+cd ts-playwright
+npm run casos
+npm run evidencias
 ```
+
+Descarga `evidencias.html` con clic derecho sobre el archivo → **Download**. Las pruebas corren sin ventana de navegador.
 
 Las cuentas personales de GitHub incluyen horas gratuitas de Codespaces al mes, suficientes para el bootcamp si apagas el Codespace al terminar.
 

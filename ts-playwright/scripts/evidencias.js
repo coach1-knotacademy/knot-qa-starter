@@ -2,6 +2,10 @@
 // Se abre con doble clic. Si corre en GitHub Actions, también escribe el resumen de la corrida.
 const fs = require('fs');
 
+if (!fs.existsSync('resultados.json')) {
+  console.log('Todavía no hay resultados. Primero corre las pruebas: npm run casos');
+  process.exit(1);
+}
 const reporte = JSON.parse(fs.readFileSync('resultados.json', 'utf8'));
 const casos = [];
 

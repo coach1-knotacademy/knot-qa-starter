@@ -51,6 +51,16 @@ Edita los casos con el Bloc de notas o VS Code: `ts-playwright\tests\s2\casos\tr
 
 Escribe en el chat: `RUTA 2 LISTA`.
 
+**Variante con editor completo: Codespaces.** Si prefieres una terminal como la del instructor, en tu repositorio pulsa **Code → Codespaces → Create codespace on main**. Tarda de 3 a 5 minutos en abrir la primera vez. Después:
+
+```bash
+cd ts-playwright
+npm run casos
+npm run evidencias
+```
+
+Descarga `evidencias.html` con clic derecho → **Download**. Si tu red no lo abre, sigue con el lápiz ✏️: llegas a lo mismo.
+
 **Si falla:** si Actions dice *Workflows aren't being run*, pulsa **Enable**. Si no puedes crear la cuenta o GitHub no abre, Ruta 3.
 
 ## Ruta 3 · Solo navegador
