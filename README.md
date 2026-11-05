@@ -78,6 +78,25 @@ git push -u origin main
 # desde ahí, lo nuevo del coach se trae con: git pull knot main --no-rebase --no-edit
 ```
 
+## Sesión 2: empieza aquí
+
+**[Elige tu ruta →](ELIGE-TU-RUTA.md)** En tu equipo, en la nube o solo con el navegador. Retos: [`retos/S02.md`](retos/S02.md). Los ejemplos están en `ts-playwright/tests/s2/`:
+
+| # | Ejemplo | Qué enseña |
+|---|---|---|
+| 00 | `00-grabado-con-codegen` | Grabar una prueba sin escribir código |
+| 01 | `01-login` | Pasar de un caso manual a una prueba |
+| 02 | `02-otp-por-sms` | Leer un código OTP en otra pestaña |
+| 03 | `03-tabla-de-casos` | Una tabla de casos convertida en pruebas |
+| 04 | `04-api-como-postman` | Lo que haces en Postman, automatizado |
+| 05 | `05-pantalla-y-servicio` | La pestaña Red, y simular fallas del servicio |
+| 06 | `06-el-centavo-en-tres-capas` | El mismo bug en unit, API y UI |
+| 07 | `07-evidencias` | Evidencias automáticas paso a paso |
+| 08 | `08-por-que-clases` | Clases, herencia y polimorfismo |
+| 09 | `09-la-prueba-inestable` | Por qué una prueba falla a veces |
+| 10 | `10-revisado-de-ia` | Revisar lo que escribe una IA |
+| 11 | `11-tus-casos` | Pruebas que salen de una tabla, sin programar |
+
 ## Qué se prueba
 
 | Capa | Contra qué | Qué valida |

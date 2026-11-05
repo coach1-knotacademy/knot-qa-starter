@@ -1,0 +1,5 @@
+id;caso;tipo;usuario;clave;resultado_esperado
+I01;Datos correctos;funcional;ana;Clave123;ENTRA
+I02;Clave errada;seguridad;ana;otra;Usuario o clave incorrectos
+I03;Usuario que no existe;seguridad;nadie;Clave123;Usuario o clave incorrectos
+I04;Usuario bloqueado;seguridad;bloqueado;Clave123;Tu usuario está bloqueado. Comunícate con la línea de atención

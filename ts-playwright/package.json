@@ -16,7 +16,13 @@
     "test:ui-mode": "playwright test --ui",
     "report": "playwright show-report",
     "codegen": "playwright codegen https://www.saucedemo.com",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "demo": "node demo-banco/server.js",
+    "s2": "playwright test --project=s2",
+    "s2:headed": "playwright test --project=s2 --headed",
+    "evidencias": "node scripts/evidencias.js",
+    "casos": "playwright test 11-tus-casos --project=s2",
+    "s2:grabar": "playwright codegen http://127.0.0.1:4000"
   },
   "devDependencies": {
     "@playwright/test": "1.63.0",

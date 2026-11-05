@@ -1,0 +1,56 @@
+# Comprueba los scripts de arranque en un Windows real, con Windows PowerShell 5.1.
+name: Scripts en Windows
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/**'
+      - 'preparar.cmd'
+      - '.github/workflows/windows.yml'
+
+jobs:
+  scripts:
+    runs-on: windows-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        shell: powershell
+    steps:
+      - uses: actions/checkout@v7
+      - name: Los scripts se pueden leer sin errores
+        run: |
+          foreach ($archivo in Get-ChildItem scripts\*.ps1) {
+            $errores = $null
+            [void][System.Management.Automation.Language.Parser]::ParseFile($archivo.FullName, [ref]$null, [ref]$errores)
+            if ($errores) { $errores | Out-String | Write-Host; throw "Errores en $($archivo.Name)" }
+            Write-Host "OK $($archivo.Name)"
+          }
+      - name: Verificador
+        run: powershell -ExecutionPolicy Bypass -File scripts\verificar-entorno.ps1
+      - name: Instalador, en simulacion
+        run: powershell -ExecutionPolicy Bypass -File scripts\instalar-entorno.ps1 -Track playwright -Simular
+      - name: Preparar sin Node ni Chromium disponibles
+        run: |
+          # Simula un equipo restringido: sin Node en el PATH y sin poder descargar Chromium.
+          Rename-Item "$env:ProgramFiles\nodejs" 'nodejs_oculto'
+          $env:Path = (($env:Path -split ';') | Where-Object { $_ -notmatch 'nodejs|npm|hostedtoolcache.*node' }) -join ';'
+          $env:PLAYWRIGHT_DOWNLOAD_HOST = 'https://127.0.0.1:9'
+          . .\scripts\preparar-playwright.ps1
+          if (-not $global:PreparacionOk) { throw 'preparar-playwright no termino bien' }
+          if ($env:PW_CHANNEL -ne 'msedge') { throw "Se esperaba msedge y quedo: $env:PW_CHANNEL" }
+          Write-Host "Node usado: $((Get-Command node).Source)"
+          Rename-Item "$env:ProgramFiles\nodejs_oculto" 'nodejs'
+      - name: Preparar en condiciones normales
+        run: |
+          . .\scripts\preparar-playwright.ps1
+          if (-not $global:PreparacionOk) { throw 'preparar-playwright no termino bien' }
+      - name: preparar.cmd arranca
+        shell: cmd
+        run: echo exit | preparar.cmd
+      - name: Suite completa en Windows, con Chromium
+        working-directory: ts-playwright
+        run: |
+          npx.cmd playwright test --project=s2
+          if ($LASTEXITCODE -ne 0) { throw 'la suite fallo' }

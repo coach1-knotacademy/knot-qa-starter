@@ -1,0 +1,71 @@
+# Cada cambio corre las pruebas en la nube y deja evidencias con pantallazos.
+# Esto es un pipeline: lo construiremos paso a paso en la S10.
+name: Pruebas
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pruebas-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  pruebas:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: ts-playwright
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ts-playwright/package-lock.json
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - name: Correr las pruebas
+        id: pruebas
+        continue-on-error: true
+        run: npx playwright test --project=s2
+      - name: Armar las evidencias
+        if: always()
+        run: node scripts/evidencias.js
+      - name: Guardar las evidencias
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          path: ts-playwright/evidencias.html
+          archive: false
+      - name: Preparar la publicación
+        if: always() && github.repository == 'coach1-knotacademy/knot-qa-starter'
+        run: node scripts/construir-sitio.js
+      - name: Subir el sitio
+        if: always() && github.repository == 'coach1-knotacademy/knot-qa-starter'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: ts-playwright/sitio
+      - name: Marcar el resultado
+        if: steps.pruebas.outcome == 'failure'
+        run: |
+          echo "Hay casos en rojo. Abre evidencias.html: puede ser un error en la fila o un hallazgo."
+          exit 1
+
+  publicar:
+    needs: pruebas
+    if: always() && github.repository == 'coach1-knotacademy/knot-qa-starter'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.despliegue.outputs.page_url }}
+    steps:
+      - id: despliegue
+        uses: actions/deploy-pages@v5

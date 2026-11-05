@@ -1,0 +1,7 @@
+id;caso;tipo;usuario;cuenta_origen;destino;monto;resultado_esperado;gmf_esperado;saldo_despues_esperado
+T01;Transferencia normal desde Ahorros;cálculo;ana;1000000001;2000000001;100000;exitosa;400;1399600
+T02;Monto menor al mínimo;límite;ana;1000000001;2000000001;999;El monto mínimo es $1.000;;
+T03;Monto mayor al máximo;límite;ana;1000000001;2000000001;2000001;El monto máximo por transferencia es $2.000.000;;
+T04;Cuenta destino con 9 dígitos;validación;ana;1000000001;123456789;50000;La cuenta destino debe tener 10 dígitos;;
+T05;Destino igual a la cuenta de origen;validación;ana;1000000001;1000000001;50000;La cuenta destino debe ser diferente a la de origen;;
+T06;Monto mayor al saldo;límite;ana;1000000001;2000000001;1600000;Saldo insuficiente;;

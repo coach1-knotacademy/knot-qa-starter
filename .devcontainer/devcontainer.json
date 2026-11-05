@@ -1,15 +1,10 @@
 {
   "name": "knot-qa-starter",
-  "image": "mcr.microsoft.com/devcontainers/java:21",
-  "features": {
-    "ghcr.io/devcontainers/features/java:1": { "version": "none", "installMaven": "true" },
-    "ghcr.io/devcontainers/features/node:1": { "version": "22" }
-  },
-  "postCreateCommand": "cd ts-playwright && npm ci && npx playwright install --with-deps chromium && cd ../java-selenium && mvn -q -DskipTests dependency:go-offline",
+  "image": "mcr.microsoft.com/devcontainers/javascript-node:22",
+  "postCreateCommand": "cd ts-playwright && npm ci && npx playwright install --with-deps chromium",
   "containerEnv": { "CI": "true" },
   "customizations": {
-    "vscode": {
-      "extensions": ["vscjava.vscode-java-pack", "ms-playwright.playwright"]
-    }
+    "codespaces": { "openFiles": ["ts-playwright/tests/s2/casos/transferencias.csv", "ELIGE-TU-RUTA.md"] },
+    "vscode": { "extensions": ["ms-playwright.playwright"] }
   }
 }
