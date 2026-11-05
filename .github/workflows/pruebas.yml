@@ -69,3 +69,5 @@ jobs:
     steps:
       - id: despliegue
         uses: actions/deploy-pages@v5
+        with:
+          timeout: 300000
